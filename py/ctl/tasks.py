@@ -14,7 +14,7 @@ def task_view(id):
     # we filter to get clean id / throw extra elements
     # at the end of the day, id == cleaned_id
     id_checked = "".join([c.lower() for c in id if (c.isalnum() or c == '-')])
-    if id in task_info and id == id_checked:
+    if id_checked in task_info:
         return flask.render_template('tasks/view.html', data = [id,task_info[id]])
     else:
         flask.abort(404)
