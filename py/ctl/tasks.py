@@ -15,6 +15,6 @@ def task_view(id):
     # at the end of the day, id == cleaned_id
     id_checked = "".join([c.lower() for c in id if (c.isalnum() or c == '-')])
     if id_checked in task_info:
-        return flask.render_template('tasks/view.html', data = [id,task_info[id]])
+        return flask.render_template('tasks/view.html', data = [id,task_info[id_checked]])
     else:
         flask.abort(404)
