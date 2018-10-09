@@ -49,9 +49,9 @@
     <script>
         <!--Critical: due to jq.js placing on template footer, we must wait until the library is loaded (cant use document.ready). -->
         document.addEventListener("DOMContentLoaded", function (evt) {
-            let form = $('.needs-validation')[0];
-            $('#login').click(function () {
-                $('#form-login').submit(function (event){
+            let form = $(".needs-validation")[0];
+            $("#login").click(function () {
+                $("#form-login").submit(function (event){
                     if (!form.checkValidity()) {
                         event.preventDefault();
                         event.stopPropagation();
@@ -60,8 +60,8 @@
                     $(this).unbind(event);
                 });
             });
-            $('#register').click(function () {
-                $('#form-login').submit(function (event){
+            $("#register").click(function () {
+                $("#form-login").submit(function (event){
                     if (!checkRegisterValidity(form)) {
                         event.preventDefault();
                         event.stopPropagation();
@@ -73,11 +73,13 @@
         });
 
         function checkRegisterValidity(form) {
-            let isPassword2Filled = $('#password2').val().length > 0 ;
-            let isEmailFilled = $('#email').val().length > 0 ;
+            let pass_input = $("#password2");
+            let email_input = $("#email");
+            let isPassword2Filled = pass_input.val().length > 0 ;
+            let isEmailFilled = email_input.val().length > 0 ;
             if (!(isPassword2Filled && isEmailFilled)) {
-                $('#password2').prop('required', true);
-                $('#email').prop('required', true);
+                pass_input.prop('required', true);
+                email_input.prop('required', true);
             }
             return form.checkValidity();
         }
