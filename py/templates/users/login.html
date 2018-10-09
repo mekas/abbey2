@@ -3,29 +3,85 @@
 {% block title %}Main Page{% endblock %}
 
 {% block content %}
-<div class="row">
-  <div class="col-lg-6 col-sm-12 offset-lg-3 text-center">
-    <h1>Welcome, Friend!</h1>
-    <form action="{{ url_for('users.login_form') }}" method="POST">
-      <div class="form-group">
-        <input type="text" name="username" class="form-control" placeholder="your username">
-      </div>
-      <div class="form-group">
-        <input type="password" name="password" class="form-control" placeholder="password">
-      </div>
-      <button type="submit" class="btn btn-primary">Log in</button>
-      <br/><hr/><br/>
-      <h3>first time here?</h3>
-      <p>fill in these additional fields to register</p>
-      <div class="form-group">
-        <input type="password" name="password2" class="form-control" placeholder="repeat password">
-      </div>
-      <div class="form-group">
-        <input type="email" name="email" class="form-control" placeholder="email">
-      </div>
-      <button type="submit" class="btn">Register</button>
-    </form>
-  </div>
-</div>
+    <div class="row">
+        <div class="col-lg-6 col-sm-12 offset-lg-3 text-center">
+            <h1>Welcome, Friend!</h1>
+            <form id="form-login" class="needs-validation" novalidate action="{{ url_for('users.login_form') }}"
+                  method="POST">
+                <div class="form-group">
+                    <input type="text" name="username" id="username" class="form-control"
+                           placeholder="your username" pattern="^[a-zA-Z][a-zA-Z0-9-_\.]{1,20}$" required>
+                    <div class="invalid-feedback">
+                        Username is empty
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="password" name="password" class="form-control" id="password" placeholder="password"
+                           pattern="^[a-zA-Z][a-zA-Z0-9-_\.]{1,20}$" required>
+                    <div class="invalid-feedback">
+                        Password is empty
+                    </div>
+                </div>
+                <button type="submit" id="login" class="btn btn-primary">Log in</button>
+                <br/>
+                <hr/>
+                <br/>
+                <h3>first time here?</h3>
+                <p>fill in these additional fields to register</p>
+                <div class="form-group">
+                    <input type="password" name="password2" id='password2' class="form-control"
+                           pattern="^[a-zA-Z][a-zA-Z0-9-_\.]{1,20}$" placeholder="repeat password">
+                    <div class="invalid-feedback">
+                        Password2 is empty
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="email" name="email" id="email" class="form-control" placeholder="email">
+                    <div class="invalid-feedback">
+                        Email is empty
+                    </div>
+                </div>
+                <button type="submit" id="register" class="btn">Register</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        <!--Critical: due to jq.js placing on template footer, we must wait until the library is loaded (cant use document.ready). -->
+        document.addEventListener("DOMContentLoaded", function (evt) {
+            let form = $('.needs-validation')[0];
+            $('#login').click(function () {
+                $('#form-login').submit(function (event){
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                    $(this).unbind(event);
+                });
+            });
+            $('#register').click(function () {
+                $('#form-login').submit(function (event){
+                    if (!checkRegisterValidity(form)) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                    $(this).unbind(event);
+                });
+            });
+        });
+
+        function checkRegisterValidity(form) {
+            let isPassword2Filled = $('#password2').val().length > 0 ;
+            let isEmailFilled = $('#email').val().length > 0 ;
+            if (!(isPassword2Filled && isEmailFilled)) {
+                $('#password2').prop('required', true);
+                $('#email').prop('required', true);
+            }
+            return form.checkValidity();
+        }
+    </script>
+
 {% endblock %}
 
